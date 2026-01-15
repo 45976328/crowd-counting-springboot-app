@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zones-service
+spec:
+  selector:
+    matchLabels:
+      app: zones-service
+  template:
+    metadata:
+      labels:
+        app: zones-service
+    spec:
+      containers:
+      - name: zones-service
+        image: zones-service
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        resources:
+                requests:
+                  memory: "512Mi"
+                  cpu: "250m"
+                limits:
+                  memory: "1Gi"
+                  cpu: "500m"

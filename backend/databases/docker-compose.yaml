@@ -1,0 +1,68 @@
+
+services:
+  database:
+    image: influxdb:2.7.12
+    container_name: influxdb
+    ports:
+      - 8083:8086
+    environment:
+      DOCKER_INFLUXDB_INIT_USERNAME: user
+      DOCKER_INFLUXDB_INIT_PASSWORD: password
+      DOCKER_INFLUXDB_INIT_ORG: org
+      DOCKER_INFLUXDB_INIT_BUCKET: bucket
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: token
+      # The DOCKER_INFLUXDB_INIT_* variables only apply on first startup. 
+      # If your InfluxDB data/config volumes already existed, the DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: token won’t take effect, 
+      # and Grafana will get “unauthorized”. GOTO http://localhost:8083 to fix
+    volumes:
+      - type: volume
+        source: influxdb-data
+        target: /var/lib/influxdb2
+      - type: volume
+        source: influxdb-config
+        target: /etc/influxdb2
+  grafana:
+    image: grafana/grafana:12.2
+    container_name: grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana:/var/lib/grafana
+    ports:
+      - 8084:3000
+    depends_on:
+      - database
+
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    ports:
+      - 8085:5432
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: database
+    volumes:
+      - type: volume
+        source: postgresql
+        target: /var/lib/postgresql/data
+
+networks:
+  default:
+    external:
+      name: microservices-net
+
+volumes:
+  influxdb-data:
+    external:
+      true
+  influxdb-config:
+    external:
+      true
+  grafana:
+    external:
+      true
+  postgresql:
+    external:
+      true

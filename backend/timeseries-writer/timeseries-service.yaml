@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: timeseries-writer
+spec:
+  selector:
+    app: timeseries-writer
+  ports:
+  - port: 8080
+    targetPort: 8080

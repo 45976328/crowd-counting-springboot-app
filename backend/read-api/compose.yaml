@@ -1,0 +1,10 @@
+services:
+  read-api:
+    image: read-api
+    ports:
+      - "8180:8180"
+
+networks:
+  default:
+    external:
+      name: microservices-net

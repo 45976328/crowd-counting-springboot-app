@@ -1,0 +1,87 @@
+# ----------------------------------------
+# PersistentVolumeClaims
+# ----------------------------------------
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: influxdb-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: influxdb-config
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+# ----------------------------------------
+# InfluxDB Deployment
+# ----------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      containers:
+        - name: influxdb
+          image: influxdb:2.7.12
+          ports:
+            - containerPort: 8086
+          env:
+            - name: DOCKER_INFLUXDB_INIT_USERNAME
+              value: user
+            - name: DOCKER_INFLUXDB_INIT_PASSWORD
+              value: password
+            - name: DOCKER_INFLUXDB_INIT_ORG
+              value: org
+            - name: DOCKER_INFLUXDB_INIT_BUCKET
+              value: bucket
+            - name: DOCKER_INFLUXDB_INIT_ADMIN_TOKEN
+              value: token
+          volumeMounts:
+            - name: influxdb-data
+              mountPath: /var/lib/influxdb2
+            - name: influxdb-config
+              mountPath: /etc/influxdb2
+      volumes:
+        - name: influxdb-data
+          persistentVolumeClaim:
+            claimName: influxdb-data
+        - name: influxdb-config
+          persistentVolumeClaim:
+            claimName: influxdb-config
+---
+# ----------------------------------------
+# InfluxDB Service (NodePort)
+# ----------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: database
+spec:
+  type: NodePort
+  selector:
+    app: database
+  ports:
+    - name: http
+      port: 8086
+      targetPort: 8086
+      nodePort: 30086

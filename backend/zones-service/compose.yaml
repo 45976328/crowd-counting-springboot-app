@@ -1,0 +1,10 @@
+services:
+  zones-service:
+    image: zones-service
+    ports:
+      - "8088:8080"
+
+networks:
+  default:
+    external:
+      name: microservices-net

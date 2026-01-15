@@ -1,0 +1,10 @@
+services:
+  timeseries-writer:
+    image: timeseries-writer
+    ports:
+      - "8087:8080"
+
+networks:
+  default:
+    external:
+      name: microservices-net

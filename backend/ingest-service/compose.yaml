@@ -1,0 +1,10 @@
+services:
+  ingest-service:
+    image: ingest-service
+    ports:
+      - "8086:8080"
+
+networks:
+  default:
+    external:
+      name: microservices-net
