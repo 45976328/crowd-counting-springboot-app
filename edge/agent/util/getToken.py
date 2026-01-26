@@ -2,7 +2,7 @@ import requests, os, time
 from pathlib import Path
 
 KEYCLOAK_SERVER_URL=f"http://192.168.1.241:8082/realms/api-gateway/protocol/openid-connect/token"
-CLIENT_SECRET = "ipuc97IMM5ePXvCWbdVg8aEgRHxgO3Rh"
+CLIENT_SECRET = "Y8D4cosVmykLdfSAJQGcchgqG0TadXHm"
 CLIENT_ID="edge-agent"
 
 def getDataAccessToken():

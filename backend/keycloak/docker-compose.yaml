@@ -13,7 +13,7 @@ services:
         KC_DB_URL: jdbc:postgresql://keycloak-postgres:5432/keycloak
         KC_DB_USERNAME: root
         KC_DB_PASSWORD: root
-        KC_HOSTNAME: localhost
+        # KC_HOSTNAME: localhost
         KC_HOSTNAME_PORT: 8080
         # KC_HTTPS_CERTIFICATE_FILE: /certs/fullchain.pem
         # KC_HTTPS_CERTIFICATE_KEY_FILE: /certs/privkey.pem

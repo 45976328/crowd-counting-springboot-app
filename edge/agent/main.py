@@ -22,7 +22,7 @@ def main():
     handleToken()
     response = sendData(os.getenv("WIFI_DUMP_FILENAME"))
     try:
-        if response.status == 200:
+        if response.status_code == 200:
             os.remove(os.getenv("WIFI_DUMP_FILENAME"))
     except:
         print("wifi.json won't be deleted until post is successful")
